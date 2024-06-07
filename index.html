@@ -1,0 +1,65 @@
+<!doctype html>
+<!--
+ @license
+ Copyright 2019 Google LLC. All Rights Reserved.
+ SPDX-License-Identifier: Apache-2.0
+-->
+<html>
+  <head>
+    <title>Place Autocomplete map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+            <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+		<script>
+			const cipher = salt => {
+			const textToChars = text => text.split('').map(c => c.charCodeAt(0));
+			const byteHex = n => ("0" + Number(n).toString(16)).substr(-2);
+			const applySaltToChar = code => textToChars(salt).reduce((a,b) => a ^ b, code);
+
+			return text => text.split('')
+				.map(textToChars)
+				.map(applySaltToChar)
+				.map(byteHex)
+				.join('');
+		}
+
+		const decipher = salt => {
+			const textToChars = text => text.split('').map(c => c.charCodeAt(0));
+			const applySaltToChar = code => textToChars(salt).reduce((a,b) => a ^ b, code);
+			return encoded => encoded.match(/.{1,2}/g)
+				.map(hex => parseInt(hex, 16))
+				.map(applySaltToChar)
+				.map(charCode => String.fromCharCode(charCode))
+				.join('');
+		}
+		</script>
+    <style rel="styles.css"></style>
+  </head>
+  <body>
+    <div id="trip-summary-card" class="place-autocomplete-card">
+      <p>Trip Summary:</p>
+      Distance: <span id="trip-summary-miles"></span> mi<br/>
+      Duration: <span id="trip-summary-minutes"></span> minutes
+    </div>
+    <div id="map"></div>
+    <div id="itinerary">
+      <div class="place-autocomplete-card" id="place-autocomplete-card-pickup">
+        <p>Pickup:</p>
+      </div>
+      <div class="place-autocomplete-card" id="place-autocomplete-card-dropoff">
+        <p>Dropoff:</p>
+      </div>
+    </div>
+    <div id="statusBar"></div>
+    <!-- prettier-ignore -->
+    <script>
+        let decoder = decipher("iamsosohre");
+				let kval = decoder("5b53607b49635e5d73552e77687462564c726b227c456a2850767f7c6355505e697c22792e5869");
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+        ({key: kval, v: "beta"});</script>
+    <script src="widget_main.js"></script>
+   
+  </body>
+</html>
