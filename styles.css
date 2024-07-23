@@ -48,6 +48,11 @@ body {
   font-weight: bold;
 }
 
+span#label_text{
+  font-size:medium;
+  font-weight:bold;
+}
+
 div.status_msg{
   background:#CCCCCC;
 }
