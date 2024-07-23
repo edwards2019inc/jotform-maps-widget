@@ -194,6 +194,7 @@ function onDirectionsReady(directions) {
     driveTime: $('#trip-summary-minutes').text(),
     driveDistance: $('#trip-summary-miles').text()
   }
+  console.log("sending data: " + JSON.stringify(jotformReturnData))
   JFCustomWidget.sendData({
     valid: true,
     value: JSON.stringify(jotformReturnData)
