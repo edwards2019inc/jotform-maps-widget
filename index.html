@@ -6,7 +6,7 @@
 -->
 <html>
   <head>
-    <title>Place Autocomplete map</title>
+    <title>Configure Your Ride</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
             <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
@@ -38,12 +38,6 @@
     <style rel="styles.css"></style>
   </head>
   <body>
-    <div id="trip-summary-card" class="place-autocomplete-card">
-      <p>Trip Summary:</p>
-      Distance: <span id="trip-summary-miles"></span> mi<br/>
-      Duration: <span id="trip-summary-minutes"></span> minutes
-    </div>
-    <div id="map"></div>
     <div id="itinerary">
       <div class="place-autocomplete-card" id="place-autocomplete-card-pickup">
         <p>Pickup:</p>
@@ -51,7 +45,15 @@
       <div class="place-autocomplete-card" id="place-autocomplete-card-dropoff">
         <p>Dropoff:</p>
       </div>
+      <div id="trip-summary-card" class="place-autocomplete-card">
+        <p>Trip Summary:</p>
+        Distance: <span id="trip-summary-miles"></span> mi<br/>
+        Duration: <span id="trip-summary-minutes"></span> minutes
+      </div>
     </div>
+
+    <div id="map"></div>
+    
     <div id="statusBar"></div>
     <!-- prettier-ignore -->
     <script>
