@@ -36,12 +36,13 @@ body {
 .place-autocomplete-card {
   background-color: #ffffff;
   border-radius: 3px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   margin: 8px;
   padding: 3px;
   font-family: Roboto, sans-serif;
   font-size: medium;
   font-weight: bold;
+  width:100%;
+  display:flex;
 }
 
 .infowindow-content .title {
@@ -55,4 +56,13 @@ span#label_text{
 
 div.status_msg{
   background:#CCCCCC;
+}
+.place-autocomplete-label{
+  margin-right:10px;
+}
+.place-autocomplete-input{
+  width:100%;
+}
+.hidden{
+  display:none;
 }

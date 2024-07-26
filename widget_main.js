@@ -47,10 +47,11 @@ async function initMap() {
 
   //@ts-ignore
   const placeAutocompletePickup = new google.maps.places.PlaceAutocompleteElement();
-
+  
   //@ts-ignore
   placeAutocompletePickup.id = "place-autocomplete-input-pickup";
-
+  placeAutocompletePickup.classList.add("place-autocomplete-input");
+  
   const pickupCard = document.getElementById("place-autocomplete-card-pickup");
 
   //@ts-ignore
@@ -61,7 +62,8 @@ async function initMap() {
 
   //@ts-ignore
   placeAutocompleteDropoff.id = "place-autocomplete-input-dropoff";
-
+  placeAutocompleteDropoff.classList.add("place-autocomplete-input");
+  
   const dropoffCard = document.getElementById("place-autocomplete-card-dropoff");
 
   //@ts-ignore
