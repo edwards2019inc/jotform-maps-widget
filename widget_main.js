@@ -7,7 +7,7 @@ let map;
 let pickupMarker;
 let pickupInfoWindow;
 let dropoffMarker;
-let dropoffMarkerInfoWindow;
+let dropoffInfoWindow;
 let pickupPlace;
 let dropoffPlace;
 
@@ -73,12 +73,12 @@ async function initMap() {
   pickupMarker = new google.maps.marker.AdvancedMarkerElement({
     map,
   });
-  pickupInfoWindow = new google.maps.InfoWindow({});
+  pickupInfoWindow = new google.maps.InfoWindow({headerDisabled:true});
 
   dropoffMarker = new google.maps.marker.AdvancedMarkerElement({
     map,
   });
-  dropoffInfoWindow = new google.maps.InfoWindow({});
+  dropoffInfoWindow = new google.maps.InfoWindow({headerDisabled:true});
 
   // Add the gmp-placeselect listener, and display the results on the map.
   //@ts-ignore
@@ -99,7 +99,7 @@ async function initMap() {
 
     let content =
       '<div class="infowindow-content">' +
-      '<h2>Pickup:</h2>' +
+      '<span>Pickup:</span>' +
       '<span id="pickup-displayname" class="title">' +
       place.displayName +
       "</span><br />" +
@@ -120,7 +120,7 @@ async function initMap() {
     });
     // If the place has a geometry, then present it on a map.
     if (place.viewport) {
-      map.fitBounds(place.viewport);
+      map.fitBounds(place.viewport, 25);
     } else {
       map.setCenter(place.location);
       map.setZoom(17);
@@ -128,7 +128,7 @@ async function initMap() {
 
     let content =
       '<div class="infowindow-content">' +
-      '<h2>Dropoff:</h2>' +
+      '<span>Dropoff:</span>' +
       '<span id="dropoff-displayname" class="title">' +
       place.displayName +
       "</span><br />" +
@@ -196,6 +196,12 @@ function onDirectionsReady(directions) {
     driveTime: $('#trip-summary-minutes').text(),
     driveDistance: $('#trip-summary-miles').text()
   }
+  bounds = new google.maps.LatLngBounds();
+  bounds.extend(pickupMarker.position);
+  bounds.extend(dropoffMarker.position);
+  bounds.extend(pickupInfoWindow.getAnchor().position);
+  bounds.extend(dropoffInfoWindow.getAnchor().position);
+  map.fitBounds(bounds,25);
   console.log("sending data: " + JSON.stringify(jotformReturnData))
   JFCustomWidget.sendData({
     valid: true,
