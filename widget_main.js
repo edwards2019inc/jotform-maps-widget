@@ -184,7 +184,6 @@ function getDirections(originPlace, destinationPlace) {
     });
 }
 
-
 function onDirectionsReady(directions) {
   let duration = directions.routes[0].legs[0].duration.value;
   let distance = km2mi(directions.routes[0].legs[0].distance.value);
@@ -199,9 +198,10 @@ function onDirectionsReady(directions) {
   bounds = new google.maps.LatLngBounds();
   bounds.extend(pickupMarker.position);
   bounds.extend(dropoffMarker.position);
+  console.log(pickupInfoWindow.getAnchor());
   bounds.extend(pickupInfoWindow.getAnchor().position);
   bounds.extend(dropoffInfoWindow.getAnchor().position);
-  map.fitBounds(bounds,25);
+  map.fitBounds(bounds,100);
   console.log("sending data: " + JSON.stringify(jotformReturnData))
   JFCustomWidget.sendData({
     valid: true,
