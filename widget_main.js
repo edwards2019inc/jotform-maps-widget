@@ -204,7 +204,7 @@ function onDirectionsReady(directions) {
   bounds.extend(pickupInfoWindow.getAnchor().position);
   bounds.extend(dropoffInfoWindow.getAnchor().position);
   map.fitBounds(bounds,100);
-  console.log("sending data: " + JSON.stringify(jotformReturnData))
+  console.log("sending maps data: " + JSON.stringify(jotformReturnData))
   JFCustomWidget.sendData({
     valid: true,
     value: JSON.stringify(jotformReturnData)
