@@ -191,7 +191,9 @@ function onDirectionsReady(directions) {
   $('#trip-summary-minutes').text(Math.ceil(duration / 60 * 10) / 10);
   jotformReturnData = {
     pickupAddress: pickupPlace.formattedAddress,
+    pickupPlaceID:pickupPlace.id,
     destinationAddress: dropoffPlace.formattedAddress,
+    destinationPlaceID: dropoffPlace.id,
     driveTime: $('#trip-summary-minutes').text(),
     driveDistance: $('#trip-summary-miles').text()
   }
@@ -216,7 +218,7 @@ JFCustomWidget.subscribe("ready", function(formid, value) {
   document.getElementById('label_text').innerHTML = label;
   //subscribe to form submit event
   JFCustomWidget.subscribe("submit", function() {
-    console.log("Routing Widget submit");
+    console.log("Maps Widget submit");
     var msg = {
       //you should valid attribute to data for JotForm
       //to be able to use youw widget as required
