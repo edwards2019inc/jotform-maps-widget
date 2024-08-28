@@ -85,6 +85,7 @@ async function initMap() {
   placeAutocompletePickup.addEventListener("gmp-placeselect", async ({
     place
   }) => {
+    document.activeElement.blur();
     await place.fetchFields({
       fields: ["displayName", "formattedAddress", "location"],
     });
@@ -110,11 +111,11 @@ async function initMap() {
 
     updateInfoWindow(pickupInfoWindow, pickupMarker, content, place.location);
     pickupMarker.position = place.location;
-    document.activeElement.blur();
   });
   placeAutocompleteDropoff.addEventListener("gmp-placeselect", async ({
     place
   }) => {
+    document.activeElement.blur();
     dropoffPlace = place
     await place.fetchFields({
       fields: ["displayName", "formattedAddress", "location"],
@@ -143,7 +144,6 @@ async function initMap() {
     if(pickupPlace && dropoffPlace){
       getDirections(pickupPlace, dropoffPlace);
     }
-    document.activeElement.blur();
   });
   console.log("Maps Initialized.");
 }
