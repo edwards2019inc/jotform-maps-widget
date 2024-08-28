@@ -110,6 +110,7 @@ async function initMap() {
 
     updateInfoWindow(pickupInfoWindow, pickupMarker, content, place.location);
     pickupMarker.position = place.location;
+    document.getElementById("place-autocomplete-input-pickup").blur();
   });
   placeAutocompleteDropoff.addEventListener("gmp-placeselect", async ({
     place
@@ -142,6 +143,7 @@ async function initMap() {
     if(pickupPlace && dropoffPlace){
       getDirections(pickupPlace, dropoffPlace);
     }
+    document.getElementById("place-autocomplete-input-dropoff").blur();
   });
   console.log("Maps Initialized.");
 }
