@@ -142,6 +142,10 @@ async function initMap() {
     updateInfoWindow(dropoffInfoWindow, dropoffMarker, content, place.location);
     dropoffMarker.position = place.location;
     if(pickupPlace && dropoffPlace){
+      document.getElementById("place-autocomplete-card-dropoff").blur();
+      document.getElementById("place-autocomplete-card-pickup").blur();
+      document.getElementById("map").focus();
+      console.log("blurring input and switching focus to map");
       getDirections(pickupPlace, dropoffPlace);
     }
   });
