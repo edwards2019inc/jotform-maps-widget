@@ -85,7 +85,7 @@ async function initMap() {
   placeAutocompletePickup.addEventListener("gmp-placeselect", async ({
     place
   }) => {
-    document.activeElement.blur();
+    
     await place.fetchFields({
       fields: ["displayName", "formattedAddress", "location"],
     });
@@ -115,7 +115,6 @@ async function initMap() {
   placeAutocompleteDropoff.addEventListener("gmp-placeselect", async ({
     place
   }) => {
-    document.activeElement.blur();
     dropoffPlace = place
     await place.fetchFields({
       fields: ["displayName", "formattedAddress", "location"],
@@ -144,6 +143,10 @@ async function initMap() {
     if(pickupPlace && dropoffPlace){
       getDirections(pickupPlace, dropoffPlace);
     }
+  });
+  placeAutocompleteDropoff.addEventListener("gmp-placeselect", 
+    place => {
+      document.activeElement.blur();
   });
   console.log("Maps Initialized.");
 }
@@ -214,8 +217,8 @@ function onDirectionsReady(directions) {
 }
 //always subscribe to ready event and implement widget related code
 //inside callback function , it is the best practice while developing widgets
-JFCustomWidget.subscribe("ready", function(formid, value) {
-  console.log("ready: " + JSON.stringify(formid) + ", " + JSON.stringify(value));
+JFCustomWidget.subscribe("ready", function(initData) {
+  console.log("ready: " + JSON.stringify(initData));
   var label = JFCustomWidget.getWidgetSetting('QuestionLabel');
   document.getElementById('label_text').innerHTML = label;
   //subscribe to form submit event
