@@ -10,6 +10,7 @@ let dropoffMarker;
 let dropoffInfoWindow;
 let pickupPlace;
 let dropoffPlace;
+let jotformReturnData;
 
 async function initMap() {
   console.log("Initializing Maps...");
