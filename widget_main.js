@@ -222,6 +222,11 @@ function onDirectionsReady(directions) {
     value: JSON.stringify(jotformReturnData)
   });
 }
+function autoPopulate(value){
+  place_ids = alue.split("|");
+  console.log("place ids: " + JSON.stringify(place_ids));
+  getDirections(place_ids[0], place_ids[1]);
+}
 //always subscribe to ready event and implement widget related code
 //inside callback function , it is the best practice while developing widgets
 JFCustomWidget.subscribe("ready", function(initData) {
@@ -264,10 +269,14 @@ JFCustomWidget.subscribe("ready", function(initData) {
       console.log("Maps not initialized yet. Initializing... ");
       initMap();
     }
-    place_ids = data.value.split("|");
-    console.log("place ids: " + JSON.stringify(place_ids));
-    getDirections(place_ids[0], place_ids[1]);
+    autoPopulate(data.value);
   });
+
+  if(initData.state == "oldvalue"){
+    if(initData.value){
+      autoPopulate(oldvalue);
+    }
+  }
 
 });
 initMap();
