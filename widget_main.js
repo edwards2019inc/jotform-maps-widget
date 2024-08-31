@@ -11,6 +11,7 @@ let dropoffInfoWindow;
 let pickupPlace;
 let dropoffPlace;
 let jotformReturnData;
+let erc_maps_init = false;
 
 async function initMap() {
   console.log("Initializing Maps...");
@@ -154,6 +155,7 @@ async function initMap() {
       document.activeElement.blur();
   });
   console.log("Maps Initialized.");
+  erc_maps_init = true;
 }
 // Helper function to create an info window.
 function updateInfoWindow(infoWindow, marker, content, center) {
@@ -254,23 +256,19 @@ JFCustomWidget.subscribe("ready", function(initData) {
     JFCustomWidget.sendSubmit(msg);
 
   });
-  /*
-  TODO: update to support populating (need to fill in autocomplete)
+  
+  //TODO: update to support populating (need to fill in autocomplete)
   JFCustomWidget.subscribe('populate', function(data) {
-    //logStatusMessage("populate: " + JSON.stringify(data));
     console.log("populate: " + JSON.stringify(data));
-    let ride_data = JSON.parse(data.value);
-    let cur_pickup = $('#pickup_address').val();
-    let cur_dest = $('#destination_address').val();
-    if (cur_pickup != ride_data.pickup || cur_dest != ride_data.destination) {
-      console.log("Updating ride data");
-      $('#pickup_address').val(ride_data.pickup);
-      $('#destination_address').val(ride_data.destination);
-      onSubmit();
-    } else {
-      console.log("populate event called but has same pickup & destination, so not refreshing");
+    if(!erc_maps_init){
+      console.log("Maps not initialized yet. Initializing... ");
+      initMap();
     }
+    let ride_data = JSON.parse(data.value);
+    place_ids = ride_data.split("|");
+    console.log("place ids: " + JSON.stringify(place_ids));
+    getDirections(place_ids[0], place_ids[1]);
   });
-  */
+
 });
 initMap();
