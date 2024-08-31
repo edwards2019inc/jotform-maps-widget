@@ -223,7 +223,7 @@ function onDirectionsReady(directions) {
   });
 }
 function autoPopulate(value){
-  place_ids = alue.split("|");
+  place_ids = value.split("|");
   console.log("place ids: " + JSON.stringify(place_ids));
   getDirections(place_ids[0], place_ids[1]);
 }
