@@ -264,8 +264,7 @@ JFCustomWidget.subscribe("ready", function(initData) {
       console.log("Maps not initialized yet. Initializing... ");
       initMap();
     }
-    let ride_data = JSON.parse(data.value);
-    place_ids = ride_data.split("|");
+    place_ids = data.value.split("|");
     console.log("place ids: " + JSON.stringify(place_ids));
     getDirections(place_ids[0], place_ids[1]);
   });
