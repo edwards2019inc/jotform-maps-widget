@@ -225,7 +225,7 @@ function onDirectionsReady(directions) {
 function autoPopulate(value){
   place_ids = value.split("|");
   console.log("place ids: " + JSON.stringify(place_ids));
-  getDirections(place_ids[0], place_ids[1]);
+  getDirections({id:place_ids[0]}, {id:place_ids[1]});
 }
 //always subscribe to ready event and implement widget related code
 //inside callback function , it is the best practice while developing widgets
