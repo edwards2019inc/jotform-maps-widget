@@ -274,7 +274,7 @@ JFCustomWidget.subscribe("ready", function(initData) {
 
   if(initData.state == "oldvalue"){
     if(initData.value){
-      autoPopulate(oldvalue);
+      autoPopulate(initData.value);
     }
   }
 
