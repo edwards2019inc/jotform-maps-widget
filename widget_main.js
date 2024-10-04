@@ -237,9 +237,9 @@ function onDirectionsReady (directions) {
 function autoPopulate (value) {
   const place_ids = value.split('|')
   console.log('place ids: ' + JSON.stringify(place_ids))
-  pickupPlace = new google.maps.places.Place({ id: place_ids[0], requestedLanguage: 'en' });
-  dropoffPlace = new google.maps.places.Place({ id: place_ids[1], requestedLanguage: 'en' });
-  if(pickupPlace){
+  if(place_ids[0]){
+    document.getElementById('place-autocomplete-card-pickup').value = place_ids[0];
+    pickupPlace = new google.maps.places.Place({ id: place_ids[0], requestedLanguage: 'en' });
     pickupPlace
       .fetchFields({
         fields: ['displayName', 'formattedAddress', 'location']
@@ -248,7 +248,9 @@ function autoPopulate (value) {
         updatePickupMarker(pickupPlace)
       });
   }
-  if(dropoffPlace){
+  if(place_ids[1]){
+    document.getElementById('place-autocomplete-card-dropoff').value = place_ids[1];
+    dropoffPlace = new google.maps.places.Place({ id: place_ids[1], requestedLanguage: 'en' });
     dropoffPlace
     .fetchFields({
       fields: ['displayName', 'formattedAddress', 'location']
