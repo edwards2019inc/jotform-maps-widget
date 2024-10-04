@@ -307,6 +307,8 @@ JFCustomWidget.subscribe('ready', function (initData) {
       if (!erc_maps_init) {
         console.log('Maps not initialized yet. Initializing... ')
         initMap().then(()=>{autoPopulate(initData.value);});
+      }else{
+        autoPopulate(initData.value);
       }
     }
   }
