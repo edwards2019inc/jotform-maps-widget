@@ -41,6 +41,7 @@ async function updatePickupMarker (place) {
 
   updateInfoWindow(pickupInfoWindow, pickupMarker, content, place.location)
   pickupMarker.position = place.location
+  getDirections(pickupPlace, dropoffPlace);
 }
 async function updateDropoffMarker (place) {
   dropoffPlace = place
@@ -68,13 +69,7 @@ async function updateDropoffMarker (place) {
 
   updateInfoWindow(dropoffInfoWindow, dropoffMarker, content, place.location)
   dropoffMarker.position = place.location
-  if (pickupPlace && dropoffPlace) {
-    document.getElementById('place-autocomplete-card-dropoff').blur()
-    document.getElementById('place-autocomplete-card-pickup').blur()
-    document.getElementById('map').focus()
-    console.log('blurring input and switching focus to map')
-    getDirections(pickupPlace, dropoffPlace)
-  }
+  getDirections(pickupPlace, dropoffPlace);
 }
 async function initMap () {
   console.log('Initializing Maps...')
@@ -190,8 +185,18 @@ function km2mi (km) {
 function getDirections (originPlace, destinationPlace) {
   // timAnchor is one of departure_time or arrival_time
   // anchorTime is an integer from Date.getTime()
-  console.log(originPlace)
-  console.log(destinationPlace)
+
+  console.log("getDirections");
+  console.log(originPlace);
+  console.log(destinationPlace);
+  if (originPlace && destinationPlace) {
+    document.getElementById('place-autocomplete-card-dropoff').blur()
+    document.getElementById('place-autocomplete-card-pickup').blur()
+    document.getElementById('map').focus()
+    console.log('blurring input and switching focus to map')
+  }else{
+    return;
+  }
   directionsService
     .route({
       origin: { placeId: originPlace.id },
@@ -234,21 +239,24 @@ function autoPopulate (value) {
   console.log('place ids: ' + JSON.stringify(place_ids))
   pickupPlace = new google.maps.places.Place({ id: place_ids[0], requestedLanguage: 'en' });
   dropoffPlace = new google.maps.places.Place({ id: place_ids[1], requestedLanguage: 'en' });
-  pickupPlace
+  if(pickupPlace){
+    pickupPlace
+      .fetchFields({
+        fields: ['displayName', 'formattedAddress', 'location']
+      })
+      .then(() => {
+        updatePickupMarker(pickupPlace)
+      });
+  }
+  if(dropoffPlace){
+    dropoffPlace
     .fetchFields({
       fields: ['displayName', 'formattedAddress', 'location']
     })
     .then(() => {
-      updatePickupMarker(pickupPlace)
-      dropoffPlace
-        .fetchFields({
-          fields: ['displayName', 'formattedAddress', 'location']
-        })
-        .then(() => {
-          updateDropoffMarker(dropoffPlace);
-          getDirections(pickupPlace, dropoffPlace);
-        })
-    })
+      updateDropoffMarker(dropoffPlace);
+    });
+  }
 }
 //always subscribe to ready event and implement widget related code
 //inside callback function , it is the best practice while developing widgets
@@ -296,7 +304,10 @@ JFCustomWidget.subscribe('ready', function (initData) {
 
   if (initData.state == 'oldvalue') {
     if (initData.value) {
-      autoPopulate(initData.value);
+      if (!erc_maps_init) {
+        console.log('Maps not initialized yet. Initializing... ')
+        initMap().then(()=>{autoPopulate(initData.value);});
+      }
     }
   }
 })
