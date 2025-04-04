@@ -141,13 +141,13 @@ async function initMap () {
   // Add the gmp-placeselect listener, and display the results on the map.
   //@ts-ignore
   placeAutocompletePickup.addEventListener(
-    'gmp-select',
+    'place_changed',
     async ({ place }) => {
       await updatePickupMarker(place)
     }
   )
   placeAutocompleteDropoff.addEventListener(
-    'gmp-select',
+    'place_changed',
     async ({ place }) => {
       await updateDropoffMarker(place)
     }
