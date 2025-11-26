@@ -17,7 +17,7 @@ let erc_maps_init = false
 
 async function updatePickupMarker (place) {
   await place.fetchFields({
-    fields: ['displayName', 'formattedAddress', 'location']
+    fields: ['displayName', 'formattedAddress', 'location', 'addressComponents']
   })
   pickupPlace = place
   // If the place has a geometry, then present it on a map.
@@ -46,7 +46,7 @@ async function updatePickupMarker (place) {
 async function updateDropoffMarker (place) {
   dropoffPlace = place
   await place.fetchFields({
-    fields: ['displayName', 'formattedAddress', 'location']
+    fields: ['displayName', 'formattedAddress', 'location', 'addressComponents']
   })
   // If the place has a geometry, then present it on a map.
   if (place.viewport) {
@@ -183,6 +183,45 @@ function logStatusMessage (msg) {
 function km2mi (km) {
   return (km * 3.28084) / 5280
 }
+
+function extractAddressComponents(place) {
+  const components = {
+    unit: '',
+    street_number: '',
+    street_name: '',
+    city: '',
+    state: '',
+    zip: ''
+  };
+
+  if (place.addressComponents) {
+    for (const component of place.addressComponents) {
+      const types = component.types;
+      if (types.includes('subpremise')) {
+        components.unit = component.shortText;
+      }
+      if (types.includes('street_number')) {
+        components.street_number = component.shortText;
+      }
+      if (types.includes('route')) {
+        components.street_name = component.shortText;
+      }
+      if (types.includes('locality')) {
+        components.city = component.shortText;
+      }
+      if (types.includes('administrative_area_level_1')) {
+        components.state = component.shortText;
+      }
+      if (types.includes('postal_code')) {
+        components.zip = component.shortText;
+      }
+    }
+  }
+  return components;
+}
+function getNormalizedAddress(components) {
+  return components.street_number + " " + components.street_name + (components.unit? " #"+components.unit : "") + ", " + components.city + ", " + components.state + " " + components.zip;
+}
 //function getDirections(apikey, origin, destination, timeAnchor, anchorTime){
 function getDirections (originPlace, destinationPlace) {
   // timAnchor is one of departure_time or arrival_time
@@ -215,13 +254,20 @@ function onDirectionsReady (directions) {
   let distance = km2mi(directions.routes[0].legs[0].distance.value)
   $('#trip-summary-miles').text(Math.ceil(distance * 10) / 10)
   $('#trip-summary-minutes').text(Math.ceil((duration / 60) * 10) / 10)
+  const pickupComponents = extractAddressComponents(pickupPlace);
+  const destinationComponents = extractAddressComponents(dropoffPlace);
+
   jotformReturnData = {
     pickupAddress: pickupPlace.formattedAddress,
     pickupPlaceID: pickupPlace.id,
     destinationAddress: dropoffPlace.formattedAddress,
     destinationPlaceID: dropoffPlace.id,
+    pickupAddressKey: getNormalizedAddress(pickupComponents),
+    destinationAddressKey: getNormalizedAddress(destinationComponents),
     driveTime: $('#trip-summary-minutes').text(),
-    driveDistance: $('#trip-summary-miles').text()
+    driveDistance: $('#trip-summary-miles').text(),
+    pickupAddressComponents: pickupComponents,
+    destinationAddressComponents: destinationComponents
   }
   bounds = new google.maps.LatLngBounds()
   bounds.extend(pickupMarker.position)
@@ -244,7 +290,7 @@ function autoPopulate (value) {
     pickupPlace = new google.maps.places.Place({ id: place_ids[0], requestedLanguage: 'en' });
     pickupPlace
       .fetchFields({
-        fields: ['displayName', 'formattedAddress', 'location']
+        fields: ['displayName', 'formattedAddress', 'location', 'addressComponents']
       })
       .then(() => {
         updatePickupMarker(pickupPlace)
@@ -255,7 +301,7 @@ function autoPopulate (value) {
     dropoffPlace = new google.maps.places.Place({ id: place_ids[1], requestedLanguage: 'en' });
     dropoffPlace
     .fetchFields({
-      fields: ['displayName', 'formattedAddress', 'location']
+      fields: ['displayName', 'formattedAddress', 'location', 'addressComponents']
     })
     .then(() => {
       updateDropoffMarker(dropoffPlace);
